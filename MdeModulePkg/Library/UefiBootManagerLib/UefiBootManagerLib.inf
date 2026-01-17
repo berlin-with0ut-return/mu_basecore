@@ -8,6 +8,7 @@
 #  Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
 #  Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
 #  (C) Copyright 2016 Hewlett Packard Enterprise Development LP<BR>
+#  Copyright (c) Microsoft Corporation<BR>
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -51,7 +52,6 @@
   PrintLib
   BaseMemoryLib
   DevicePathLib
-  PerformanceLib
   PeCoffGetEntryPointLib
   UefiBootServicesTableLib
   UefiRuntimeServicesTableLib
@@ -59,7 +59,6 @@
   MemoryAllocationLib
   DxeServicesLib
   ReportStatusCodeLib
-  PerformanceLib
   HiiLib
   SortLib
   VariablePolicyHelperLib
@@ -70,6 +69,7 @@
   ## SOMETIMES_CONSUMES ## Variable:L"MemoryTypeInformation."
   ## SOMETIMES_PRODUCES ## Variable:L"MemoryTypeInformation."
   gEfiMemoryTypeInformationGuid
+  gEfiGlobalVariableGuid
 
   ## SOMETIMES_PRODUCES ## Variable:L"BootCurrent" (The boot option of current boot)
   ## SOMETIMES_CONSUMES ## Variable:L"BootXX" (Boot option variable)
@@ -78,7 +78,6 @@
   ## SOMETIMES_CONSUMES ## Variable:L"ConIn" (The device path of console in device)
   ## SOMETIMES_CONSUMES ## Variable:L"ConOut" (The device path of console out device)
   ## SOMETIMES_CONSUMES ## Variable:L"ErrOut" (The device path of error out device)
-  gEfiGlobalVariableGuid
 
   gEdkiiStatusCodeDataTypeVariableGuid          ## SOMETIMES_CONSUMES ## GUID
   gEfiDiskInfoAhciInterfaceGuid                 ## SOMETIMES_CONSUMES ## GUID
@@ -86,6 +85,9 @@
   gEfiDiskInfoScsiInterfaceGuid                 ## SOMETIMES_CONSUMES ## GUID
   gEfiDiskInfoSdMmcInterfaceGuid                ## SOMETIMES_CONSUMES ## GUID
   gEfiDiskInfoUfsInterfaceGuid                  ## SOMETIMES_CONSUMES ## GUID
+  gEfiEventPreReadyToBootGuid                   ## PRODUCES   ##MSCHANGE
+  gEfiEventPostReadyToBootGuid                  ## PRODUCES   ##MSCHANGE
+  gEfiEventReadyToBootGuid                      # MU_CHANGE
 
 [Protocols]
   gEfiPciRootBridgeIoProtocolGuid               ## CONSUMES

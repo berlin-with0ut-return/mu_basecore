@@ -1906,7 +1906,6 @@ EfiBootManagerBoot (
   VOID                       *FileBuffer;
   UINTN                      FileSize;
   EFI_BOOT_LOGO_PROTOCOL     *BootLogo;
-  EFI_EVENT                  LegacyBootEvent;
 
   if (BootOption == NULL) {
     return;
@@ -1972,7 +1971,7 @@ EfiBootManagerBoot (
     BmRepairAllControllers (0);
   }
 
-  PERF_START_EX (gImageHandle, "BdsAttempt", NULL, 0, (UINT32)OptionNumber);
+  PERF_INMODULE_BEGIN ("BdsAttempt");
 
   //
   // 5. Adjust the different type memory page number just before booting
@@ -2060,19 +2059,6 @@ EfiBootManagerBoot (
       //
       // Write boot to OS performance data for legacy boot.
       //
-      PERF_CODE (
-        //
-        // Create an event to be signalled when Legacy Boot occurs to write performance data.
-        //
-        Status = EfiCreateEventLegacyBootEx (
-                   TPL_NOTIFY,
-                   BmEndOfBdsPerfCode,
-                   NULL,
-                   &LegacyBootEvent
-                   );
-        ASSERT_EFI_ERROR (Status);
-        );
-
       mBmLegacyBoot (BootOption);
     } else {
       BootOption->Status = EFI_UNSUPPORTED;
@@ -2106,9 +2092,9 @@ EfiBootManagerBoot (
   //
   // Write boot to OS performance data for UEFI boot
   //
-  PERF_CODE (
-    BmEndOfBdsPerfCode (NULL, NULL);
-    );
+  PERF_INMODULE_END ("BdsAttempt");
+  PERF_CROSSMODULE_END ("BDS");     // BEGIN is in MdeModulePkg\Universal\BdsDxe\BdsEntry.c
+  PERF_CROSSMODULE_BEGIN ("BDS");   // Keep logging BDS in case of reentry
 
   REPORT_STATUS_CODE (EFI_PROGRESS_CODE, PcdGet32 (PcdProgressCodeOsLoaderStart));
 
